@@ -41,11 +41,24 @@ RETAIN_COLOR = '#2ECC71'
 
 
 # ── Data / model loaders ─────────────────────────────────────────────────────
+def _ensure_data():
+    """Generate customers.csv if it doesn't exist (e.g. on Streamlit Cloud)."""
+    if DATA_PATH.exists():
+        return
+    DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+    # Import and run the generation script directly — no subprocess needed
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        'generate_data',
+        Path(__file__).parent.parent / 'scripts' / 'generate_data.py',
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+
 @st.cache_data
 def load_data():
-    if not DATA_PATH.exists():
-        st.error('customers.csv not found. Run: python scripts/generate_data.py')
-        st.stop()
+    _ensure_data()
     return pd.read_csv(DATA_PATH)
 
 
