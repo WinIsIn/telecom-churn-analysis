@@ -20,6 +20,17 @@ data/raw/
 # Jupyter
 .ipynb_checkpoints/
 
+# Streamlit secrets (never commit)
+.streamlit/secrets.toml
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
+
+# Jupyter runtime
+.jupyter/
+
 # OS
 .DS_Store
 Thumbs.db
