@@ -65,7 +65,9 @@ def load_data():
 @st.cache_resource
 def load_model():
     if not MODEL_PATH.exists():
-        return None
+        # Auto-train on first boot (e.g. Streamlit Cloud where model.pkl isn't in git)
+        from src.model import train
+        train()
     return joblib.load(MODEL_PATH)
 
 
